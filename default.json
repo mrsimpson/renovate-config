@@ -6,7 +6,9 @@
   ],
 
   "timezone": "Europe/Berlin",
-  "schedule": ["before 10am on Saturday"],
+  "schedule": [
+    "before 10am on Saturday"
+  ],
 
   "prConcurrentLimit": 5,
   "prHourlyLimit": 0,
@@ -15,57 +17,38 @@
   "osvVulnerabilityAlerts": true,
 
   "minimumReleaseAge": "3 days",
+  "internalChecksFilter": "strict",
 
   "separateMajorMinor": true,
 
   "packageRules": [
     {
-      "description": "Group all patch updates into a single PR per repo",
-      "matchUpdateTypes": ["patch", "pin", "digest"],
+      "description": "Automerge every non-major update once it is 3 days old (minimumReleaseAge, against supply chain attacks); patches grouped into one PR per repo",
+      "matchUpdateTypes": [
+        "patch",
+        "pin",
+        "digest",
+        "pinDigest"
+      ],
       "groupName": "all patch dependencies",
       "automerge": true,
       "automergeType": "pr",
       "platformAutomerge": true
     },
     {
-      "description": "Automerge minor updates for low-risk dev tooling (type annotations, linters, formatters, test tools)",
-      "matchDepTypes": ["devDependencies"],
-      "matchPackagePatterns": [
-        "^@types/",
-        "^eslint",
-        "^prettier",
-        "^vitest",
-        "^@vitest/",
-        "^@testing-library/",
-        "^typescript$",
-        "^tsx$",
-        "^ts-node$"
+      "description": "Automerge minor updates once they are 3 days old, one PR each so a breaking minor does not block the others",
+      "matchUpdateTypes": [
+        "minor"
       ],
-      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-      "groupName": "dev tooling (low risk)",
       "automerge": true,
       "automergeType": "pr",
       "platformAutomerge": true
     },
     {
-      "description": "Automerge minor updates for other devDependencies after a longer wait",
-      "matchDepTypes": ["devDependencies"],
-      "matchUpdateTypes": ["minor"],
-      "minimumReleaseAge": "7 days",
-      "automerge": true,
-      "automergeType": "pr",
-      "platformAutomerge": true
-    },
-    {
-      "description": "Never automerge major updates — always require manual review",
-      "matchUpdateTypes": ["major"],
-      "automerge": false,
-      "dependencyDashboardApproval": true
-    },
-    {
-      "description": "Never automerge runtime/production dependency minor+ updates",
-      "matchDepTypes": ["dependencies"],
-      "matchUpdateTypes": ["minor", "major"],
+      "description": "Major updates: a pull request to review and merge by hand, never automerged",
+      "matchUpdateTypes": [
+        "major"
+      ],
       "automerge": false
     }
   ]
