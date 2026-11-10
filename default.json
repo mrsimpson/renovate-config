@@ -45,6 +45,15 @@
       "platformAutomerge": true
     },
     {
+      "description": "Automerge lock file maintenance (the weekly refresh of the lock files, which also takes the fixed versions of indirect dependencies with a security alert) once its checks pass",
+      "matchUpdateTypes": [
+        "lockFileMaintenance"
+      ],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true
+    },
+    {
       "description": "Major updates: a pull request to review and merge by hand, never automerged",
       "matchUpdateTypes": [
         "major"
